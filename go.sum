@@ -1,2 +1,2 @@
-github.com/digitorus/pkcs7 v0.0.0-20221019075359-21b8b40e6bb4 h1:MxNIia2F3bgFyNsOZy9UbNlpKAxbtCudkVmlJBNuvmg=
-github.com/digitorus/pkcs7 v0.0.0-20221019075359-21b8b40e6bb4/go.mod h1:SKVExuS+vpu2l9IoOc0RwqE7NYnb0JlcFHFnEJkVDzc=
+github.com/YapealAG/adapted-digitorus-pkcs7 v0.0.3 h1:GLONZh2uO36xkSPuW6C/wN23llERY3sp6YsqMRFw+u0=
+github.com/YapealAG/adapted-digitorus-pkcs7 v0.0.3/go.mod h1:SKVExuS+vpu2l9IoOc0RwqE7NYnb0JlcFHFnEJkVDzc=
