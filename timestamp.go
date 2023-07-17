@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"github.com/digitorus/pkcs7"
+	"github.com/digitorus/timestamp/asn1fixed"
 )
 
 // FailureInfo contains the failure details of an Time-Stamp request. See
@@ -156,7 +157,7 @@ func ParseRequest(bytes []byte) (*Request, error) {
 	var rest []byte
 	var req request
 
-	if rest, err = asn1.Unmarshal(bytes, &req); err != nil {
+	if rest, err = asn1fixed.Unmarshal(bytes, &req); err != nil {
 		return nil, err
 	}
 	if len(rest) > 0 {
@@ -258,7 +259,7 @@ func ParseResponse(bytes []byte) (*Timestamp, error) {
 	var rest []byte
 	var resp response
 
-	if rest, err = asn1.Unmarshal(bytes, &resp); err != nil {
+	if rest, err = asn1fixed.Unmarshal(bytes, &resp); err != nil {
 		return nil, err
 	}
 	if len(rest) > 0 {
@@ -306,7 +307,7 @@ func Parse(bytes []byte) (*Timestamp, error) {
 	}
 
 	var inf tstInfo
-	if _, err = asn1.Unmarshal(p7.Content, &inf); err != nil {
+	if _, err = asn1fixed.Unmarshal(p7.Content, &inf); err != nil {
 		return nil, err
 	}
 
@@ -490,7 +491,12 @@ func generateTSASerialNumber() (*big.Int, error) {
 	return serialNumber, nil
 }
 
-func (t *Timestamp) populateTSTInfo(messageImprint messageImprint, policyOID asn1.ObjectIdentifier, tsaSerialNumber *big.Int, tsaCert *x509.Certificate) ([]byte, error) {
+func (t *Timestamp) populateTSTInfo(
+	messageImprint messageImprint,
+	policyOID asn1.ObjectIdentifier,
+	tsaSerialNumber *big.Int,
+	tsaCert *x509.Certificate,
+) ([]byte, error) {
 	dirGeneralName, err := asn1.Marshal(asn1.RawValue{Tag: 4, Class: 2, IsCompound: true, Bytes: tsaCert.RawSubject})
 	if err != nil {
 		return nil, err
@@ -591,7 +597,11 @@ func (t *Timestamp) populateSigningCertificateV2Ext(certificate *x509.Certificat
 	return signingCertV2Bytes, nil
 }
 
-func (t *Timestamp) generateSignedData(tstInfo []byte, signer crypto.Signer, certificate *x509.Certificate) ([]byte, error) {
+func (t *Timestamp) generateSignedData(
+	tstInfo []byte,
+	signer crypto.Signer,
+	certificate *x509.Certificate,
+) ([]byte, error) {
 	signedData, err := pkcs7.NewSignedData(tstInfo)
 	if err != nil {
 		return nil, err
